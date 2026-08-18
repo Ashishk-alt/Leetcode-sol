@@ -1,0 +1,50 @@
+class Solution {
+    // Main method written as 'connect' on the whiteboard
+    public void reorderList(ListNode head) {
+        if (head == null) return;
+        
+        ListNode m = middle(head);
+        ListNode th = m.next;
+        m.next = null;
+        
+        th = reverse(th);
+        reorder(head, th);
+    }
+    // Finds the middle of the linked list using fast and slow pointers
+    public ListNode middle(ListNode head) {
+        ListNode f = head;
+        ListNode s = head;
+        
+        while (f.next != null && f.next.next != null) {
+            f = f.next.next;
+            s = s.next;
+        }
+        return s;
+    }
+    // Reverses the second half of the linked list
+    public ListNode reverse(ListNode h) {
+        ListNode p = null;
+        ListNode c = h;
+        
+        while (c != null) {
+            ListNode n = c.next;
+            c.next = p;
+            p = c;
+            c = n;
+        }
+        return p;
+    }
+    // Merges the two halves alternately (completed helper function)
+    private void reorder(ListNode h1, ListNode h2) {
+        while (h1 != null && h2 != null) {
+            ListNode n1 = h1.next;
+            ListNode n2 = h2.next;
+            
+            h1.next = h2;
+            h2.next = n1;
+            
+            h1 = n1;
+            h2 = n2;
+        }
+    }
+}
