@@ -1,0 +1,17 @@
+class Solution {
+    public int numOfWays(int n) {
+        long MOD = 1_000_000_007;
+        long same = 6;
+        long diff = 6;
+
+        for (int i = 1; i < n; i++) {
+            
+            long nextSame = (same * 3 + diff * 2) % MOD;
+            long nextDiff = (same * 2 + diff * 2) % MOD;
+
+            same = nextSame;
+            diff = nextDiff;
+        }
+        return (int) ((same + diff) % MOD);
+    }
+}
