@@ -1,0 +1,23 @@
+class Solution {
+    public String stoneGameIII(int[] stoneValue) {
+        int n = stoneValue.length;
+        int [] a = new int[n+1];
+
+        for(int i=n-1; i>=0; i--){
+            int best = Integer.MIN_VALUE;
+            int runningSum = 0;
+            for(int k=1; k<=3 && i+k<=n; k++){
+                runningSum += stoneValue[i+k-1];
+                best = Math.max(best, runningSum-a[i+k]);
+            }
+            a[i] = best;
+        }
+        if(a[0]>0){
+            return "Alice";
+        }else if(a[0]<0){
+            return "Bob";
+        }else{
+            return "Tie";
+        }
+    }
+}
