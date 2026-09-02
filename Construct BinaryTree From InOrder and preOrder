@@ -1,0 +1,52 @@
+import java.util.HashMap;
+import java.util.Map;
+
+// Definition for a binary tree node.
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+class Solution {
+    // Map to store value-to-index pairs for fast inorder lookups
+    private Map<Integer, Integer> inorderMap = new HashMap<>();
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        // Build the hashmap to get O(1) index lookup time
+        for (int i = 0; i < inorder.length; i++) {
+            inorderMap.put(inorder[i], i);
+        }
+        
+        return buildTreeHelper(preorder, 0, preorder.length - 1, 0, inorder.length - 1);
+    }
+
+    private TreeNode buildTreeHelper(int[] preorder, int preStart, int preEnd, int inStart, int inEnd) {
+        // Base case: if pointers cross, the subtree is empty
+        if (preStart > preEnd || inStart > inEnd) {
+            return null;
+        }
+
+        // The first element in preorder traversal is always the root node
+        int rootVal = preorder[preStart];
+        TreeNode root = new TreeNode(rootVal);
+
+        // Locate the root node's index in the inorder array
+        int rootInIdx = inorderMap.get(rootVal);
+        // Calculate how many nodes belong to the left subtree
+        int leftSize = rootInIdx - inStart;
+
+        // Recursively build the left and right subtrees
+        root.left = buildTreeHelper(preorder, preStart + 1, preStart + leftSize, inStart, rootInIdx - 1);
+        root.right = buildTreeHelper(preorder, preStart + leftSize + 1, preEnd, rootInIdx + 1, inEnd);
+
+        return root;
+    }
+}
