@@ -1,0 +1,46 @@
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int n = nums.length;
+        // Handle edge cases for empty array or invalid window size
+        if (n == 0 || k == 0) {
+            return new int[0];
+        }
+
+        Deque<Integer> dq = new ArrayDeque<>();
+        
+        // --- 1st Window Setup ---
+        for (int i = 0; i < k; i++) {
+            while (dq.size() > 0 && nums[dq.peekLast()] <= nums[i]) {
+                dq.pollLast();
+            }
+            dq.offerLast(i);
+        }
+
+        // Prepare the result array 
+        int[] res = new int[n - k + 1];
+        int index = 0;
+
+        // --- Processing Remaining Windows ---
+        for (int i = k; i < n; i++) {
+            // Store the maximum of the previous window
+            res[index++] = nums[dq.peekFirst()];
+            
+            // remove not part of curr wind
+            while (dq.size() > 0 && dq.peekFirst() <= i - k) {
+                dq.pollFirst();
+            }
+            
+            // remove the smaller vals
+            while (dq.size() > 0 && nums[dq.peekLast()] <= nums[i]) {
+                dq.pollLast();
+            }
+            
+            dq.offerLast(i);
+        }
+
+        // --- Collect Maximum of the Last Window  ---
+        res[index] = nums[dq.peekFirst()];
+
+        return res;
+    }
+}
