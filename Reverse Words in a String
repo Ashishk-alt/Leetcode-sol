@@ -1,0 +1,29 @@
+public class Solution {
+    public String reverseWords(String s) {
+        int n = s.length();
+        String ans = "";
+        
+        // 1. Reverse the entire string manually
+        String reversedS = "";
+        for (int i = n - 1; i >= 0; i--) {
+            reversedS += s.charAt(i);
+        }       
+        // 2. Process each word
+        for (int i = 0; i < n; i++) {
+            String word = "";
+            while (i < n && reversedS.charAt(i) != ' ') {
+                word += reversedS.charAt(i);
+                i++;
+            }         
+            // 3. Reverse the individual word manually
+            String revWord = "";
+            for (int j = word.length() - 1; j >= 0; j--) {
+                revWord += word.charAt(j);
+            }          
+            if (revWord.length() > 0) {
+                ans += " " + revWord;
+            }
+        }   
+        return ans.length() > 0 ? ans.substring(1) : "";
+    }
+}
