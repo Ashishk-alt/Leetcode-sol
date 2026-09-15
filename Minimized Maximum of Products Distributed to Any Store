@@ -1,0 +1,39 @@
+class Solution {
+    // Helper function
+    public boolean possibleToDistribute(int x, int[] quantities, int shops) {
+        for (int i = 0; i < quantities.length; i++) {
+            int products = quantities[i];
+            int requiredShops = (products + x - 1) / x;
+            shops = shops - requiredShops;
+            if (shops < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public int minimizedMaximum(int n, int[] quantities) {
+        int low = 1;
+        int high = quantities[0];
+        // Find maximum quantity
+        for (int i = 1; i < quantities.length; i++) {
+            if (quantities[i] > high) {
+                high = quantities[i];
+            }
+        }
+        int result = 0;
+
+        // Binary Search
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (possibleToDistribute(mid, quantities, n)) {
+                result = mid;
+                // Try for a smaller answer
+                high = mid - 1;
+            } else {
+                // Need a bigger answer
+                low = mid + 1;
+            }
+        }
+        return result;
+    }
+}
