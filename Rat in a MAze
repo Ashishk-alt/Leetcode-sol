@@ -1,0 +1,52 @@
+import java.util.*;
+
+class Solution {
+
+    public void helper(int[][] maze, int r, int c, String path,
+                       ArrayList<String> ans ) {
+
+        int n = maze.length;
+
+        // invalid position
+        if (r < 0 || c < 0 || r >= n || c >= n ||
+            maze[r][c] == 0 || maze[r][c] == -1) {
+            return;
+        }
+
+        // reached destination
+        if (r == n - 1 && c == n - 1) {
+            ans.add(path);
+            return;
+        }
+
+        maze[r][c] = -1;
+
+        // down
+        helper(maze, r + 1, c, path + "D", ans);
+
+        // up
+        helper(maze, r - 1, c, path + "U", ans);
+
+        // left
+        helper(maze, r, c - 1, path + "L", ans);
+
+        // right
+        helper(maze, r, c + 1, path + "R", ans);
+
+        maze[r][c] = 1;
+    }
+
+    public ArrayList<String> ratInMaze(int[][] maze) {
+
+        int n = maze.length;
+
+        ArrayList<String> ans = new ArrayList<>();
+        
+
+        String path = "";
+
+        helper(maze, 0, 0, path, ans);
+
+        return ans;
+    }
+}
