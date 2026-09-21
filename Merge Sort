@@ -1,0 +1,53 @@
+class Solution {
+    public int[] sortArray(int[] nums) {
+        mergeSort(nums, 0, nums.length - 1);
+        return nums;
+    }
+
+    public void mergeSort(int[] nums, int st, int end) {
+        if (st < end) {
+            int mid = st + (end - st) / 2;
+
+            // left half
+            mergeSort(nums, st, mid);
+
+            // right half
+            mergeSort(nums, mid + 1, end);
+
+            // merge both halves
+            merge(nums, st, mid, end);
+        }
+    }
+
+    public void merge(int[] nums, int st, int mid, int end) {
+        int[] temp = new int[end - st + 1];
+
+        int i = st;
+        int j = mid + 1;
+        int k = 0;
+
+        while (i <= mid && j <= end) {
+            if (nums[i] <= nums[j]) {
+                temp[k] = nums[i];
+                i++;
+            } else {
+                temp[k] = nums[j];
+                j++;
+            }
+            k++;
+        }
+        while (i <= mid) {
+            temp[k] = nums[i];
+            i++;
+            k++;
+        }
+        while (j <= end) {
+            temp[k] = nums[j];
+            j++;
+            k++;
+        }
+        for (int idx = 0; idx < temp.length; idx++) {
+            nums[st + idx] = temp[idx];
+        }
+    }
+}
