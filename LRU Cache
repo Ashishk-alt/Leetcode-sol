@@ -1,0 +1,88 @@
+class LRUCache {
+    class Node {
+        int key;
+        int val;
+        Node prev;
+        Node next;
+
+        Node(int k, int v) {
+            key = k;
+            val = v;
+            prev = null;
+            next = null;
+        }
+    }
+    HashMap<Integer, Node> m;
+    int limit;
+
+    Node head;
+    Node tail;
+
+    LRUCache(int capacity) {
+        limit = capacity;
+        m = new HashMap<>();
+
+        head = new Node(-1, -1);
+        tail = new Node(-1, -1);
+
+        head.next = tail;
+        tail.prev = head;
+    }
+    void addNode(Node newNode) {
+        Node oldNext = head.next;
+
+        head.next = newNode;
+        oldNext.prev = newNode;
+
+        newNode.next = oldNext;
+        newNode.prev = head;
+    }
+    void delNode(Node oldNode) {
+        Node oldPrev = oldNode.prev;
+        Node oldNext = oldNode.next;
+
+        oldPrev.next = oldNext;
+        oldNext.prev = oldPrev;
+    }
+
+    public int get(int key) {
+        if (!m.containsKey(key)) {
+            return -1;
+        }
+
+        Node ansNode = m.get(key);
+        int ans = ansNode.val;
+
+        // Remove from current position
+        delNode(ansNode);
+        m.remove(key);
+
+        // Add to front because it is recently used
+        addNode(ansNode);
+        m.put(key, ansNode);
+
+        return ans;
+    }
+    public void put(int key, int value) {
+        // Key already exists
+        if (m.containsKey(key)) {
+            Node oldNode = m.get(key);
+
+            delNode(oldNode);
+            m.remove(key);
+        }
+        // Cache is full
+        if (m.size() == limit) {
+
+            // Remove least recently used node
+            Node lruNode = tail.prev;
+
+            m.remove(lruNode.key);
+            delNode(lruNode);
+        }
+        Node newNode = new Node(key, value);
+
+        addNode(newNode);
+        m.put(key, newNode);
+    }
+}
