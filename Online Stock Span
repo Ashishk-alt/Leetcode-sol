@@ -1,0 +1,31 @@
+class StockSpanner {
+    Stack<Integer> s;
+    Stack<Integer> index;
+    int day;
+
+    public StockSpanner() {
+        s = new Stack<>();
+        index = new Stack<>();
+        day = 0;
+    }
+    public int next(int price) {
+        int i = day;
+        day++;
+
+        while (!s.empty() && s.peek() <= price) {
+            s.pop();
+            index.pop();
+        }
+        int ans;
+
+        if (s.empty()) {
+            ans = i + 1;
+        } else {
+            ans = i - index.peek();
+        }
+        s.push(price);
+        index.push(i);
+        
+        return ans;
+    }
+}
